@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class MenuPrincipalTexto {
     private static final int OP_PESSOAS = 1;
 	private static final int OP_DEPTOS = 2;
+        private static final int OP_SALARIOS = 3;
+        private static final int OP_CARROS = 3;
 
 	private static final int OP_ADICIONAR = 1;
 	private static final int OP_LISTAR = 2;
@@ -12,7 +14,7 @@ public class MenuPrincipalTexto {
 	private static final int OP_EXCLUIR = 4;
 	
 	// conjunto de estados possiveis no sistema
-	private enum Estado {PRINCIPAL, PESSOAS, DEPTOS};
+	private enum Estado {PRINCIPAL, PESSOAS, DEPTOS, SALARIOS, CARROS};
 	
 	private Estado estadoAtual; // armazena o estado atual do menu
 	private Scanner entrada;
@@ -25,6 +27,8 @@ public class MenuPrincipalTexto {
 	private void imprimeMenuPrincipal() {
 		System.out.println("1 - Administração de Pessoas");
 		System.out.println("2 - Administração de Departamentos");
+                System.out.println("3 - Administração de Salarios");
+                System.out.println("4 - Administração de Estacionamento");
 	}
 	
 	private void imprimeMenuSecundário(String tipoMenu) {
@@ -55,6 +59,13 @@ public class MenuPrincipalTexto {
 			case DEPTOS:
 				imprimeMenuSecundário("Departamentos");
 				break;
+                        case SALARIOS:
+				imprimeMenuSecundário("Salarios");
+				break;
+                        case CARROS:
+				imprimeMenuSecundário("Carros");
+				break;       
+                     
 			default:
 				imprimeMenuPrincipal();
 			}
@@ -77,28 +88,34 @@ public class MenuPrincipalTexto {
 				case OP_PESSOAS:
 					estadoAtual = Estado.PESSOAS;
 					break;
-				//case OP_DEPTOS:
-				//	estadoAtual = Estado.DEPTOS;
-				//	break;
+				case OP_DEPTOS:
+					estadoAtual = Estado.DEPTOS;
+					break;
+                                case OP_SALARIOS:
+					estadoAtual = Estado.SALARIOS;
+					break;
+                                case OP_CARROS:
+					estadoAtual = Estado.CARROS;
+					break;
 				}
 			} else {
-				menuEspecificoTexto = new MenuPessoaTexto(); // apagar esta linha
+				menuEspecificoTexto = new MenuPessoaTexto(); 
 
-                /*
+                
                 if (estadoAtual == Estado.PESSOAS) {
                     menuEspecificoTexto = new MenuPessoaTexto();
                 } else {
-                    menuEspecificoTexto = new MenuDepartamentoTexto(); // <-- implementar esta classe
+                    menuEspecificoTexto = new MenuDepartamentoTexto(); 
                 }
-                 */
+                 
 
-                /*
-                if (estadoAtual == Estado.PESSOAS) {
+               /* 
+                if (estadoAtual == Estado.DEPTOS) {
                     menuEspecificoTexto = new MenuPessoaTexto();
                 } else {
-                    menuEspecificoTexto = new MenuDepartamentoTexto(); // <-- implementar esta classe
+                    menuEspecificoTexto = new MenuDepartamentoTexto(); 
                 }
-                 */
+                */ 
 
 				switch (opcao) {
 					case OP_ADICIONAR:

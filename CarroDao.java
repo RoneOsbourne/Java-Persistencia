@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import persistencia.Salario;
+import persistencia.Carro;
 
-public class SalarioDao implements IDao<Salario>{
-   public SalarioDao() {
+public class CarroDao implements IDao<Carro>{
+   public CarroDao() {
 		try {
 			createTable();
 		} catch (SQLException e) {
@@ -22,10 +22,10 @@ public class SalarioDao implements IDao<Salario>{
 		final String sqlCreate = "IF NOT EXISTS (" 
 				+ "SELECT * FROM sys.tables t JOIN sys.schemas s ON " 
 				+ "(t.schema_id = s.schema_id) WHERE s.name = 'dbo'" 
-				+ "AND t.name = 'Salario')"
-				+ "CREATE TABLE Salario"
+				+ "AND t.name = 'Carro')"
+				+ "CREATE TABLE Carro"
 				+ " (id	int	IDENTITY,"
-				+ "  valor	double,"
+				+ "  modelo	String,"
 				+ "  PRIMARY KEY (id))";
 		
 		Connection conn = DatabaseAccess.getConnection();
@@ -34,70 +34,70 @@ public class SalarioDao implements IDao<Salario>{
 		stmt.execute(sqlCreate);
 	}
 
-	public List<Salario> getAll() {
+	public List<Carro> getAll() {
 		Connection conn = DatabaseAccess.getConnection();
 		Statement stmt = null;
 		ResultSet rs = null;
 		
-		List<Salario> salarios = new ArrayList<Salario>();
+		List<Carro> carros = new ArrayList<Carro>();
 		
 		try {
 			stmt = conn.createStatement();
 			
-			String SQL = "SELECT * FROM Salario"; 
+			String SQL = "SELECT * FROM Carro"; 
 	        rs = stmt.executeQuery(SQL); 
 	        
 	        while (rs.next()) {
-	        	Salario d = getSalarioFromRs(rs);
+	        	Carro d = getCarroFromRs(rs);
 	        	
-	        	salarios.add(d);
+	        	carros.add(d);
 	        }
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("[getAllSalarios] Erro ao selecionar todos os valores de salarios", e);
+			throw new RuntimeException("[getAllCarros] Erro ao selecionar todos os veiculos dos funcionarios", e);
 		} finally {
 			close(conn, stmt, rs);
 		}
 		
-		return salarios;		
+		return carros;		
 	}
 	
-	public Salario getById(int id) {
+	public Carro getById(int id) {
 		Connection conn = DatabaseAccess.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
-		Salario salario = null;
+		Salario carro = null;
 		
 		try {
-			String SQL = "SELECT * FROM Salario WHERE id = ?";
+			String SQL = "SELECT * FROM Carro WHERE id = ?";
 			stmt = conn.prepareStatement(SQL);
 			stmt.setInt(1, id);
 			
 	        rs = stmt.executeQuery(); 
 	        
 	        while (rs.next()) {
-	        	salario = getSalarioFromRs(rs);
+	        	carro = getCarroFromRs(rs);
 	        }
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("[getSalarioById] Erro ao selecionar o salario por id", e);
+			throw new RuntimeException("[getCarroById] Erro ao selecionar o veiculo por id", e);
 		} finally {
 			close(conn, stmt, rs);
 		}
 		
-		return salario;		
+		return carro;		
 	}
 	
-	public void insert(Salario salario) {
+	public void insert(Carro carro) {
 		Connection conn = DatabaseAccess.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 				
 		try {
-			String SQL = "INSERT INTO Salario (nome) VALUES (?)";
+			String SQL = "INSERT INTO Carro (nome) VALUES (?)";
 			stmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-	    	stmt.setString(1, salario.getNome()); 
+	    	stmt.setString(1, carro.getModelo()); 
 	    	
 			
 	        stmt.executeUpdate(); 
@@ -105,11 +105,11 @@ public class SalarioDao implements IDao<Salario>{
 	        rs = stmt.getGeneratedKeys();
 	        
 	        if (rs.next()) {
-	        	salario.setId(rs.getInt(1));
+	        	carro.setId(rs.getInt(1));
 	        }
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("[insereSalario] Erro ao inserir o salario", e);
+			throw new RuntimeException("[insereCarro] Erro ao inserir o Carro", e);
 		} finally {
 			close(conn, stmt, rs);
 		}
@@ -121,43 +121,43 @@ public class SalarioDao implements IDao<Salario>{
 		PreparedStatement stmt = null;
 			
 		try {
-			String SQL = "DELETE Salario WHERE id=?";
+			String SQL = "DELETE Carro WHERE id=?";
 			stmt = conn.prepareStatement(SQL);
 			stmt.setInt(1, id);
 			
 	        stmt.executeUpdate(); 			
 		} catch (SQLException e) {
-			throw new RuntimeException("[deleteSalario] Erro ao remover o Salario por id", e);
+			throw new RuntimeException("[deleteCarro] Erro ao remover o Carro por id", e);
 		} finally {
 			close(conn, stmt, null);
 		}
 	}
 	
-	public void update(Salario salario) {
+	public void update(Carro carro) {
 		Connection conn = DatabaseAccess.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 				
 		try {
-			String SQL = "UPDATE Salario SET valor = ? WHERE id=?";
+			String SQL = "UPDATE Carro SET modelo = ? WHERE id=?";
 			stmt = conn.prepareStatement(SQL);
-	    	stmt.setString(1, salario.getNome()); 
+	    	stmt.setString(1, carro.getModelo()); 
 	    	
-	    	stmt.setInt(2, salario.getId());
+	    	stmt.setInt(2, carro.getId());
 	    	
 	        stmt.executeUpdate(); // executa o UPDATE			
 		} catch (SQLException e) {
-			throw new RuntimeException("[updateSalario] Erro ao atualizar o salario", e);
+			throw new RuntimeException("[updateCarro] Erro ao atualizar o veiculo do funcionario", e);
 		} finally {
 			close(conn, stmt, rs);
 		}
 				
 	}
 	
-	private Departamento getSalarioFromRs(ResultSet rs) throws SQLException {
-		Salario d = new Salario(); 
+	private Departamento getCarroFromRs(ResultSet rs) throws SQLException {
+		Carro d = new Carro(); 
 		d.setId(rs.getInt("id")); 
-		d.setNome(rs.getdouble("valor")); 
+		d.setModelo(rs.getString("modelo")); 
 		
 		return d;
 	}

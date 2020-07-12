@@ -4,8 +4,12 @@ import java.util.List;
 import persistencia.DatabaseAccess;
 import persistencia.DepartamentoDao;
 import persistencia.PessoaDao;
+import persistencia.SalarioDao;
+import persistencia.CarrosDao;
 import persistencia.Departamento;
 import persistencia.Pessoa;
+import persistencia.Salario;
+import persistencia.Carros;
 import persistencia.MenuPrincipalTexto;
 
 public class Principal {
@@ -69,6 +73,20 @@ public class Principal {
 		System.out.println("Lista de departamentos:");
         for (Departamento departamento : departamentos) {
 			System.out.println(departamento);
+		}
+	}
+        
+        private static void imprimeSalarios(List<Salario> salarios) {
+		System.out.println("Lista de salarios:");
+        for (Salario salario : salarios) {
+			System.out.println(salario);
+		}
+	}
+        
+        private static void imprimeCarros(List<Carros> carros) {
+		System.out.println("Lista de Carros:");
+        for (Carro carro : carros) {
+			System.out.println(carro);
 		}
 	}
 }
